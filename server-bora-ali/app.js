@@ -5,7 +5,7 @@ mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 // vai mudar o ip
-mongoose.connect('mongodb://127.0.0.1:27017/BoraAli', { useNewUrlParser: true , useUnifiedTopology: true }).then(
+mongoose.connect('mongodb+srv://rafael344355:ndTwvS5JFefCMrBd@boraalidb.paquwbm.mongodb.net/', { useNewUrlParser: true , useUnifiedTopology: true }).then(
   () => {console.log('Database is connected') },
   err => { console.log('Can not connect to the database'+ err)});
 

@@ -11,13 +11,11 @@ let User = new Schema({
  Senha: {
     type: String
   },
- Score: {
-    type: String
-  },
   picture: {
     type: String
   }
-},{
+},
+{
     collection: 'User'
 });
 
