@@ -5,8 +5,9 @@ import { Title, Card, Button } from 'react-native-paper';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 
 const UserProfile = ({ navigation, route }) => {
-  const { userId, picture } = route.params;
+  const { userId} = route.params;
  
+console.log(userId);
 
   const [user, setUser] = useState(null);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -19,7 +20,7 @@ const UserProfile = ({ navigation, route }) => {
   const fetchUser = async (id) => {
     console.log('ID do :', id);
     try {
-      const response = await fetch('http://192.168.101.9:3000/user/'+ id);
+      const response = await fetch('https://server-bora-ali.vercel.app/user/'+ id);
       const data = await response.json();
       console.log('ID do :', data);
       setUser(data.user);
@@ -30,7 +31,7 @@ const UserProfile = ({ navigation, route }) => {
   };
 
   const deleteProfile = (id, navigation) => {
-    fetch(`http://192.168.101.9:3000/user/delete/${id}`, {
+    fetch(`https://server-bora-ali.vercel.app/user/delete/${id}`, {
       method: 'delete'
     })
       .then(res => res.json())
@@ -44,7 +45,7 @@ const UserProfile = ({ navigation, route }) => {
   };
 
   const editProfile = (id, newData) => {
-    fetch(`http://192.168.101.9:3000/user/update/${id}`, {
+    fetch(`https://server-bora-ali.vercel.app/user/update/${id}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json'
@@ -135,7 +136,7 @@ const UserProfile = ({ navigation, route }) => {
         <Button
           icon="home"
           mode="contained"
-          onPress={() => navigation.navigate('Inicio')}
+          onPress={() => navigation.navigate('Inicio', { userId })}
         >
           Home
         </Button>

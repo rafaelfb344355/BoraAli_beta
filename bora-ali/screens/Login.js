@@ -1,71 +1,107 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, Alert, Text } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showModal, setShowModal] = useState(false);
-
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('http://192.168.101.9:3000/User/login', {
-        email,
-        password,
-      });
-
-      if (response.status === 200) {
-        const { userId } = response.data;
-        navigation.navigate('Perfil', { userId });
-        Alert.alert('Login bem-sucedido');
-        // Executar ação desejada após o login
-      } else {
-        Alert.alert('Credenciais inválidas');
+    const userId = null;
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+  
+    const handleLogin = async () => {
+      try {
+        const response = await axios.post('https://server-bora-ali.vercel.app/user/login', {
+          email,
+          password,
+        });
+  
+        if (response.status === 200) {
+          const { userId } = response.data;
+          console.log(userId);
+          navigation.navigate('Perfil', { userId });
+          Alert.alert('Login bem-sucedido');
+          // Execute ação desejada após o login
+        } else {
+          Alert.alert('Credenciais inválidas');
+        }
+      } catch (error) {
+        Alert.alert('Erro ao fazer login');
       }
-    } catch (error) {
-      Alert.alert('Erro ao fazer login');
-    }
+    };
+  
+    return (
+      <View style={styles.container}>
+        <Text style={styles.logo}>BoraAli!</Text>
+        <Text style={styles.greeting}>E aí, pronto para turistar de novo?</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Entrar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
+          <Text style={styles.link}>Cadastrar-se</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Inicio',{userId})}>
+          <Text style={styles.link}>Seguir sem login</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
-  return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Cadastrar-se" onPress={() => navigation.navigate('Cadastro')} />
-      <Button title="Seguir sem login" onPress={() => navigation.navigate('Inicio')} />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 16,
-  },
-});
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'white',
+      padding: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    logo: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: 'black',
+      marginBottom: 10,
+    },
+    greeting: {
+      fontSize: 16,
+      color: 'black',
+      marginBottom: 20,
+    },
+    input: {
+      width: '100%',
+      height: 40,
+      borderColor: 'gray',
+      borderWidth: 1,
+      borderRadius: 5,
+      marginBottom: 10,
+      paddingHorizontal: 10,
+    },
+    button: {
+      backgroundColor: 'orange',
+      width: '100%',
+      height: 40,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 10,
+    },
+    buttonText: {
+      color: 'white',
+      fontWeight: 'bold',
+    },
+    link: {
+      color: 'blue',
+      textDecorationLine: 'underline',
+      marginBottom: 20,
+    },
+  });

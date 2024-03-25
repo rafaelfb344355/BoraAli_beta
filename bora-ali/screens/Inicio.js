@@ -4,23 +4,24 @@ import { Card, FAB } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const Inicio = ({ navigation, route }) => {
-  
-  const [PontoTuristicos, setCarros] = useState([]);
+  const { userId} = route.params;
+  const [PontoTuristicos, setPontoTuristicos] = useState([]);
 
   useEffect(() => {
-    fetchCarros();
+    fetchPontoTuristicos();
   }, []);
 
-  const fetchCarros = async () => {
+  const fetchPontoTuristicos = async () => {
     try {
-      const response = await fetch('http://192.168.101.9:3000/poitTuristic/');
+      const response = await fetch('https://server-bora-ali.vercel.app/poitTuristic/');
       const data = await response.json();
-      setCarros(data.cars);
+      console.log(data);
+      setPontoTuristicos(data.poitTuristics);
     } catch (error) {
       console.error('Erro ao buscar os Ponto Turisticos:', error);
     }
   };
-
+  
   const renderRecommendedCar = ({ item }) => {
     return (
       <Card
@@ -29,27 +30,34 @@ const Inicio = ({ navigation, route }) => {
       >
         <Image
           style={styles.recommendedImage}
-          source={{ uri: item.picture }}
+          source={{ uri: item.picture1 || item.picture2 }}
         />
         <Text style={styles.recommendedTitle}>{item.Nome}</Text>
         
       </Card>
     );
   };
-
+  
   const renderCarCard = ({ item }) => {
     return (
       <Card
         style={styles.card}
         onPress={() => navigation.navigate('Ponto', { item })}
       >
-        <Image style={styles.cardImage} source={{ uri: item.picture }} />
+        <Image style={styles.cardImage} source={{ uri: item.picture1 || item.picture2 }} />
         <Text style={styles.title}>{item.Nome}</Text>
         
       </Card>
     );
   };
 
+  const handleProfilePress = () => {
+    if (userId) {
+      navigation.navigate('Perfil', { userId });
+    } else {
+      Alert.alert('Você não está logado');
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
       <LinearGradient
@@ -76,14 +84,13 @@ const Inicio = ({ navigation, route }) => {
             <FAB
               onPress={() => navigation.navigate('Map')}
               style={styles.fab1}
-              small={false}
+              
               icon="map"
               theme={{ colors: { accent: '#006aff' } }}
             />
             <FAB
-              onPress={() => navigation.navigate('Perfil' )}
+              onPress={handleProfilePress}
               style={styles.fab}
-              small={false}
               icon="account"
               theme={{ colors: { accent: '#006aff' } }}
             />
@@ -94,6 +101,7 @@ const Inicio = ({ navigation, route }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   content: {

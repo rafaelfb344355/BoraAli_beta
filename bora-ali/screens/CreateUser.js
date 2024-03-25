@@ -21,8 +21,8 @@ const CreateEmployee = ({ navigation, route }) => {
           return route.params.Email;
         case 'Senha':
           return route.params.Senha;
-        case 'Score':
-          return route.params.Score;
+          case 'Curtidas':
+          return route.params.Curtidas;
         case 'picture':
           return route.params.picture;
       }
@@ -33,13 +33,13 @@ const CreateEmployee = ({ navigation, route }) => {
   const [Nome, setNome] = useState(getDetails('Nome'));
   const [Email, setEmail] = useState(getDetails('Email'));
   const [Senha, setSenha] = useState(getDetails('Senha'));
-  const [Score, setScore] = useState(getDetails('Score'));
+  const [Curtidas, setCurtidas] = useState(getDetails('Curtidas'));
   const [picture, setPicture] = useState(getDetails('picture'));
   const [modal, setModal] = useState(false);
   const [enableshift, setenableShift] = useState(false);
 
   const submitData = () => {
-    fetch('http://192.168.101.9:3000/user/add', {
+    fetch('https://server-bora-ali.vercel.app/user/add', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const CreateEmployee = ({ navigation, route }) => {
         Nome,
         Email,
         Senha,
-        Score,
+        Curtidas,
         picture,
       }),
     })
@@ -63,7 +63,7 @@ const CreateEmployee = ({ navigation, route }) => {
   };
 
   const updateDetails = () => {
-    fetch(`http://192.168.101.4:3000/user/update/${route.params._id}`, {
+    fetch(`https://server-bora-ali.vercel.app/user/update/${route.params._id}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const CreateEmployee = ({ navigation, route }) => {
         Nome,
         Email,
         Senha,
-        Score,
+        Curtidas,
         picture,
       }),
     })
@@ -180,17 +180,6 @@ const CreateEmployee = ({ navigation, route }) => {
           secureTextEntry={true}
           onChangeText={(text) => setSenha(text)}
         />
-        <TextInput
-          label='Score'
-          style={styles.inputStyle}
-          value={Score}
-          onFocus={() => setenableShift(true)}
-          theme={theme}
-          keyboardType='numeric'
-          mode='outlined'
-          onChangeText={(text) => setScore(text)}
-        />
-
         <Button
           style={styles.inputStyle}
           theme={theme}
@@ -214,7 +203,7 @@ const CreateEmployee = ({ navigation, route }) => {
             theme={theme}
             icon='content-save'
             mode='contained'
-            onPress={() => submitData()}>
+            onPress={() => submitData() }>
             Salvar
           </Button>
         )}
